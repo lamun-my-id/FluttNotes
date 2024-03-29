@@ -9,10 +9,10 @@ this project support for all platform
 
 preview: 
 ## Notes
-!["FluttNotes Showcase"](https://github.com/lamun-my-id/FluttNotes/blob/main/image-1.png?raw=true "FluttNotes Showcase")
+!["FluttNotes Showcase"](https://github.com/lamun-my-id/FluttNotes/blob/master/image-1.png?raw=true "FluttNotes Showcase")
 
 ## Checklist
-!["FluttNotes Showcase"](https://github.com/lamun-my-id/FluttNotes/blob/main/image-2.png?raw=true "FluttNotes Showcase")
+!["FluttNotes Showcase"](https://github.com/lamun-my-id/FluttNotes/blob/master/image-2.png?raw=true "FluttNotes Showcase")
 
 ## Getting Started
 
