@@ -47,7 +47,10 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
         // Navigator.pop(context);
       },
       child: Scaffold(
-        appBar: AppBar(),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+        ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,

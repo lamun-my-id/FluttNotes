@@ -15,6 +15,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("FluttNotes"),
+        backgroundColor: Colors.white,
       ),
       body: Container(
         height: height,

@@ -61,8 +61,10 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
         // Navigator.pop(context);
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           titleSpacing: 0,
+          backgroundColor: Colors.white,
         ),
         body: Column(
           children: List.generate(controllers.length, (index) {
