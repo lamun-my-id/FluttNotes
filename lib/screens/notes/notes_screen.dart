@@ -19,9 +19,10 @@ class _NotesScreenState extends State<NotesScreen> {
     double height = MediaQuery.of(context).size.height;
     NotesProvider n = Provider.of<NotesProvider>(context);
     return Scaffold(
-      body: SizedBox(
+      body: Container(
         width: width,
         height: height,
+        color: Colors.white,
         child: Column(
           children: [
             Container(),
@@ -86,9 +87,9 @@ class _NotesScreenState extends State<NotesScreen> {
                           height: 100,
                           width: width,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: const Color(0xFFFCFCFD),
                             borderRadius: BorderRadius.circular(10),
-                            // border: Border.all(),
+                            border: Border.all(color: const Color(0xFFE4E7EC)),
                           ),
                           child: Column(
                             children: [
@@ -153,8 +154,15 @@ class _NotesScreenState extends State<NotesScreen> {
             ),
           );
         },
+        backgroundColor: const Color(0xFFB9E6FE),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(100),
+          ),
+        ),
         child: const Icon(
           Icons.add,
+          color: Color(0xFF026AA2),
         ),
       ),
     );
