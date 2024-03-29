@@ -142,8 +142,12 @@ class _RemindersScreenState extends State<RemindersScreen> {
                                             width: 4,
                                           ),
                                           Expanded(
-                                            child: SizedBox(
+                                            child: Container(
                                               width: width,
+                                              constraints: const BoxConstraints(
+                                                minHeight: 50,
+                                              ),
+                                              alignment: Alignment.centerLeft,
                                               child: Text(
                                                 task['controller'],
                                               ),
