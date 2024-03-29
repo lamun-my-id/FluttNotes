@@ -61,8 +61,10 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
         // Navigator.pop(context);
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           titleSpacing: 0,
+          backgroundColor: Colors.white,
         ),
         body: Column(
           children: List.generate(controllers.length, (index) {
@@ -160,10 +162,13 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                             },
                             child: Container(
                               width: width,
-                              color: Colors.deepPurple,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
                                 vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: const Color(0xFF1F325D),
                               ),
                               alignment: Alignment.center,
                               child: const Text(

@@ -15,10 +15,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("FluttNotes"),
+        backgroundColor: Colors.white,
       ),
-      body: SizedBox(
+      body: Container(
         height: height,
         width: width,
+        color: Colors.white,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -60,7 +62,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         Text(
                           "Turn on",
                           style: TextStyle(
-                            color: Colors.deepPurple,
+                            color: Color(0xFF1F325D),
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(

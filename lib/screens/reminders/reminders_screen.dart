@@ -19,9 +19,10 @@ class _RemindersScreenState extends State<RemindersScreen> {
     double height = MediaQuery.of(context).size.height;
     RemindersProvider r = Provider.of<RemindersProvider>(context);
     return Scaffold(
-      body: SizedBox(
+      body: Container(
         height: height,
         width: width,
+        color: Colors.white,
         child: Column(
           children: [
             Container(),
@@ -41,7 +42,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
                         const Icon(
                           Icons.checklist_outlined,
                           size: 32,
-                          color: Colors.deepPurple,
+                          color: Color(0xFF1F325D),
                         ),
                         const SizedBox(
                           height: 8,
@@ -87,9 +88,10 @@ class _RemindersScreenState extends State<RemindersScreen> {
                             // height: 100,
                             width: width,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: const Color(0xFFFCFCFD),
                               borderRadius: BorderRadius.circular(10),
-                              // border: Border.all(),
+                              border:
+                                  Border.all(color: const Color(0xFFE4E7EC)),
                             ),
                             child: Column(
                               children: [
@@ -202,8 +204,15 @@ class _RemindersScreenState extends State<RemindersScreen> {
             ),
           );
         },
+        backgroundColor: const Color(0xFF1F325D),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(100),
+          ),
+        ),
         child: const Icon(
           Icons.add,
+          color: Colors.white,
         ),
       ),
     );

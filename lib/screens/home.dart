@@ -19,9 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: DefaultTabController(
           length: 2,
-          child: SizedBox(
+          child: Container(
             height: height,
             width: width,
+            color: Colors.white,
             child: Stack(
               children: [
                 SizedBox(
