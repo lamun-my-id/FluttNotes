@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           title: 'FluttNotes',
           theme: ThemeData(
             colorScheme:
-                ColorScheme.fromSeed(seedColor: const Color(0xFF026AA2)),
+                ColorScheme.fromSeed(seedColor: const Color(0xFF1F325D)),
             useMaterial3: true,
             textTheme: GoogleFonts.interTextTheme(textTheme),
           ),

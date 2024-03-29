@@ -160,10 +160,13 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                             },
                             child: Container(
                               width: width,
-                              color: Colors.deepPurple,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
                                 vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: const Color(0xFF1F325D),
                               ),
                               alignment: Alignment.center,
                               child: const Text(

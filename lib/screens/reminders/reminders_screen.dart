@@ -42,7 +42,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
                         const Icon(
                           Icons.checklist_outlined,
                           size: 32,
-                          color: Colors.deepPurple,
+                          color: Color(0xFF1F325D),
                         ),
                         const SizedBox(
                           height: 8,
@@ -204,7 +204,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
             ),
           );
         },
-        backgroundColor: const Color(0xFFB9E6FE),
+        backgroundColor: const Color(0xFF1F325D),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(100),
@@ -212,6 +212,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
         ),
         child: const Icon(
           Icons.add,
+          color: Colors.white,
         ),
       ),
     );

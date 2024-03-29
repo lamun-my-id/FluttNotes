@@ -41,7 +41,7 @@ class _NotesScreenState extends State<NotesScreen> {
                       const Icon(
                         Icons.edit_note_rounded,
                         size: 32,
-                        color: Colors.deepPurple,
+                        color: Color(0xFF1F325D),
                       ),
                       const SizedBox(
                         height: 8,
@@ -154,7 +154,7 @@ class _NotesScreenState extends State<NotesScreen> {
             ),
           );
         },
-        backgroundColor: const Color(0xFFB9E6FE),
+        backgroundColor: const Color(0xFF1F325D),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(100),
@@ -162,7 +162,7 @@ class _NotesScreenState extends State<NotesScreen> {
         ),
         child: const Icon(
           Icons.add,
-          color: Color(0xFF026AA2),
+          color: Colors.white,
         ),
       ),
     );
