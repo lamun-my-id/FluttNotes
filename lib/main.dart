@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/providers/app_provider.dart';
 import 'package:fluttnotes/providers/notes_provider.dart';
 import 'package:fluttnotes/providers/reminders_provider.dart';
 import 'package:fluttnotes/screens/home.dart';
@@ -17,6 +18,9 @@ class MyApp extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<AppProvider>(
+          create: (_) => AppProvider(),
+        ),
         ChangeNotifierProvider<NotesProvider>(
           create: (_) => NotesProvider(),
         ),

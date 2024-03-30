@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/providers/app_provider.dart';
 import 'package:fluttnotes/screens/notes/notes_screen.dart';
 import 'package:fluttnotes/screens/reminders/reminders_screen.dart';
 import 'package:fluttnotes/screens/settings/settings_screen.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    Provider.of<AppProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: DefaultTabController(

@@ -1,6 +1,7 @@
 import 'package:datalocal/datalocal.dart';
 import 'package:datalocal/utils/date_time.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/providers/app_provider.dart';
 import 'package:fluttnotes/providers/notes_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -38,6 +39,9 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
     double width = MediaQuery.of(context).size.width;
     // double height = MediaQuery.of(context).size.height;
     NotesProvider n = Provider.of<NotesProvider>(context);
+    AppProvider a = Provider.of<AppProvider>(context);
+
+    double fontSize = (a.appSetting.get("fontSize.value") ?? 14) * 1.0;
 
     Future<void> save() async {
       try {
@@ -89,6 +93,9 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                   hintText: "Title",
                   border: InputBorder.none,
                 ),
+                style: TextStyle(
+                  fontSize: fontSize,
+                ),
               ),
               SizedBox(
                 width: width,
@@ -96,7 +103,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                   DateTimeUtils.dateFormat(time, format: "MMMM dd HH:mm") ?? "",
                   style: TextStyle(
                     color: Colors.grey[400]!,
-                    fontSize: 12,
+                    fontSize: fontSize - 2,
                   ),
                 ),
               ),
@@ -108,6 +115,9 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                 decoration: const InputDecoration(
                   hintText: "Start Typing",
                   border: InputBorder.none,
+                ),
+                style: TextStyle(
+                  fontSize: fontSize,
                 ),
               ),
             ],

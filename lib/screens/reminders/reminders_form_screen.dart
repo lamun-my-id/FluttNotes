@@ -1,5 +1,6 @@
 import 'package:datalocal/datalocal.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/providers/app_provider.dart';
 import 'package:fluttnotes/providers/reminders_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -48,6 +49,8 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
     double width = MediaQuery.of(context).size.width;
     // double height = MediaQuery.of(context).size.height;
     RemindersProvider r = Provider.of<RemindersProvider>(context);
+    AppProvider a = Provider.of<AppProvider>(context);
+    double fontSize = (a.appSetting.get("fontSize.value") ?? 14) * 1.0;
 
     save() async {
       try {
@@ -126,6 +129,9 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                           border: InputBorder.none,
                           counterText: "",
                         ),
+                        style: TextStyle(
+                          fontSize: fontSize,
+                        ),
                       ),
                     ),
                   SizedBox(
@@ -164,11 +170,16 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                                   "focus": FocusNode(),
                                 });
                                 setState(() {});
-                                await Future.delayed(
-                                    const Duration(milliseconds: 100));
-                                FocusScope.of(context).requestFocus(
-                                    controllers[index + 1]['focus']);
+                                Future.delayed(
+                                        const Duration(milliseconds: 100))
+                                    .then((value) {
+                                  FocusScope.of(context).requestFocus(
+                                      controllers[index + 1]['focus']);
+                                });
                               },
+                              style: TextStyle(
+                                fontSize: fontSize,
+                              ),
                               minLines: 1,
                               maxLines: 10,
                               maxLength: 250,
