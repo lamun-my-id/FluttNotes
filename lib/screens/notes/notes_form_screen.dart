@@ -64,6 +64,133 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
       setState(() {});
     }
 
+    Future<void> delete() async {
+      FocusScope.of(context).requestFocus(FocusNode());
+      showDialog(
+        context: context,
+        builder: (_) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Material(
+              color: Colors.black.withOpacity(0.25),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Positioned(
+                    bottom: 16,
+                    child: Container(
+                      width: width,
+                      constraints: const BoxConstraints(
+                        maxWidth: 350,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: width,
+                            alignment: Alignment.center,
+                            child: const Text(
+                              "Delete notes",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 40,
+                            width: width,
+                            alignment: Alignment.center,
+                            child: const Text(
+                              "Delete this note?",
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                            ),
+                            height: 60,
+                            width: width,
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: InkWell(
+                                    splashColor: Colors.transparent,
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      width: width,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: const Text("Cancel"),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 16,
+                                ),
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      titleController.text = "";
+                                      contentController.text = "";
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    splashColor: Colors.transparent,
+                                    child: Container(
+                                      height: 50,
+                                      width: width,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: const Text(
+                                        "Delete",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    }
+
     return PopScope(
       canPop: true,
       onPopInvoked: (_) async {
@@ -78,6 +205,98 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
+          actions: [
+            if (data != null)
+              IconButton(
+                onPressed: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Material(
+                          color: Colors.black.withOpacity(0.25),
+                          child: SafeArea(
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  right: 16,
+                                  top: 16,
+                                  child: Container(
+                                    width: 250,
+                                    height: 180,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                          ),
+                                          height: 60,
+                                          width: 200,
+                                          alignment: Alignment.centerLeft,
+                                          child: const Text(
+                                            "Share as Text",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                          ),
+                                          height: 60,
+                                          width: 200,
+                                          alignment: Alignment.centerLeft,
+                                          child: const Text(
+                                            "Share as Image",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            delete();
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 16,
+                                            ),
+                                            height: 60,
+                                            width: 200,
+                                            alignment: Alignment.centerLeft,
+                                            child: const Text(
+                                              "Delete",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(Icons.more_vert_outlined),
+              ),
+          ],
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
@@ -101,18 +320,22 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                   counterText: "",
                 ),
                 style: TextStyle(
-                  fontSize: fontSize,
+                  fontSize: fontSize + 4,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               SizedBox(
                 width: width,
                 child: Text(
-                  DateTimeUtils.dateFormat(time, format: "MMMM dd HH:mm") ?? "",
+                  "${DateTimeUtils.dateFormat(time, format: "MMMM dd HH:mm") ?? ""} | ${contentController.text.length} characters",
                   style: TextStyle(
                     color: Colors.grey[400]!,
                     fontSize: fontSize - 2,
                   ),
                 ),
+              ),
+              const SizedBox(
+                height: 16,
               ),
               SizedBox(
                 width: width,

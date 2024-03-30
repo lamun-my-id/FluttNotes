@@ -130,7 +130,8 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                           counterText: "",
                         ),
                         style: TextStyle(
-                          fontSize: fontSize,
+                          fontSize: fontSize + 4,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
