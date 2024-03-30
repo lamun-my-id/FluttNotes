@@ -327,7 +327,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
               SizedBox(
                 width: width,
                 child: Text(
-                  "${DateTimeUtils.dateFormat(time, format: "MMMM dd HH:mm") ?? ""} | ${contentController.text.length} characters",
+                  "${DateTimeUtils.dateFormat(time, format: "MMMM dd HH:mm", locale: "en") ?? ""} | ${contentController.text.length} characters",
                   style: TextStyle(
                     color: Colors.grey[400]!,
                     fontSize: fontSize - 2,

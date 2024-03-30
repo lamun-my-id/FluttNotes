@@ -124,10 +124,10 @@ class _NotesScreenState extends State<NotesScreen> {
                                 width: width,
                                 child: Text(
                                   DateTimeUtils.dateFormat(
-                                          d.createdAt ??
-                                              d.get("createdAt") ??
-                                              "",
-                                          format: "MMMM dd") ??
+                                        d.createdAt ?? d.get("createdAt") ?? "",
+                                        format: "MMMM dd",
+                                        locale: "en",
+                                      ) ??
                                       "",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
