@@ -58,8 +58,11 @@ class _RemindersScreenState extends State<RemindersScreen> {
                     );
                   }
                   return ListView.builder(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
+                    padding: const EdgeInsets.only(
+                      top: 16,
+                      left: 16,
+                      right: 16,
+                      bottom: 86,
                       // vertical: 16,
                     ),
                     itemCount: r.data.count,
@@ -67,7 +70,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
                       DataItem d = r.data.data[index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 8,
+                          vertical: 4,
                         ),
                         child: InkWell(
                           onTap: () {

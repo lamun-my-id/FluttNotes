@@ -116,9 +116,9 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                       child: TextField(
                         controller: titleController,
                         textInputAction: TextInputAction.go,
-                        maxLines: 100,
                         minLines: 1,
-                        maxLength: 250,
+                        maxLines: 100,
+                        maxLength: 500,
                         onSubmitted: (_) {
                           FocusScope.of(context)
                               .requestFocus(controllers.first['focus']);
