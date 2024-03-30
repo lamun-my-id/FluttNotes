@@ -12,14 +12,41 @@ class RemindersProvider with ChangeNotifier {
   }
 
   initialize() async {
-    data = await DataLocal.create("reminder",
-        onRefresh: () => refresh(), debugMode: true);
+    data = await DataLocal.create(
+      "reminder",
+      onRefresh: () => refresh(),
+      // debugMode: true,
+    );
     data.onRefresh = () {
       refresh();
     };
     data.refresh();
     isLoading = false;
     refresh();
+  }
+
+  Future<DataItem?> save({
+    String? id,
+    required String title,
+    required DateTime? date,
+    required List<Map<String, dynamic>> content,
+  }) async {
+    if (id != null) {
+      if (title.isNotEmpty ||
+          content.length >= 2 ||
+          content.first['controller'].toString().isNotEmpty) {
+        return await onUpdate(id, title: title, content: content);
+      }
+    } else {
+      if (title.isNotEmpty || content.isNotEmpty) {
+        return await data.insertOne({
+          "title": title,
+          "content": content,
+          "updatedAt": DateTime.now(),
+        });
+      }
+    }
+    return null;
   }
 
   onSave({
@@ -37,7 +64,8 @@ class RemindersProvider with ChangeNotifier {
         onDeleted(id);
       }
     } else {
-      if (title.isNotEmpty || content.isNotEmpty) {
+      if (title.isNotEmpty ||
+          content.first['controller'].toString().isNotEmpty) {
         data.insertOne({
           "title": title,
           "content": content,
@@ -50,7 +78,7 @@ class RemindersProvider with ChangeNotifier {
   onUpdate(String id,
       {required String title,
       required List<Map<String, dynamic>> content}) async {
-    data.updateOne(id, value: {
+    return await data.updateOne(id, value: {
       "title": title,
       "content": content,
       "updatedAt": DateTime.now(),

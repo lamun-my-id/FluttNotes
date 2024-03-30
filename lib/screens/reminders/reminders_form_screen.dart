@@ -12,11 +12,14 @@ class RemindersFormScreen extends StatefulWidget {
 }
 
 class _RemindersFormScreenState extends State<RemindersFormScreen> {
+  bool isLoading = false;
+
   TextEditingController titleController = TextEditingController();
   List<Map<String, dynamic>> controllers = [
     {
       "controller": TextEditingController(),
       "checklist": false,
+      "focus": FocusNode(),
     }
   ];
   DateTime? date;
@@ -33,6 +36,7 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                 "controller":
                     TextEditingController(text: e['controller'] ?? ""),
                 "checklist": e['checklist'],
+                "focus": FocusNode(),
               })
           .toList();
       setState(() {});
@@ -44,6 +48,33 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
     double width = MediaQuery.of(context).size.width;
     // double height = MediaQuery.of(context).size.height;
     RemindersProvider r = Provider.of<RemindersProvider>(context);
+
+    save() async {
+      try {
+        if (isLoading) throw "Loading ...";
+        isLoading = true;
+        setState(() {});
+        DataItem? result = await r.save(
+          date: date,
+          title: titleController.text,
+          content: controllers
+              .map((e) => {
+                    "controller": e['controller'].text,
+                    "checklist": e['checklist'],
+                  })
+              .toList(),
+          id: data?.id,
+        );
+        if (result != null) {
+          data = result;
+        }
+      } catch (e) {
+        //
+      }
+      isLoading = false;
+      setState(() {});
+    }
+
     return PopScope(
       canPop: true,
       onPopInvoked: (_) async {
@@ -66,8 +97,9 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
           titleSpacing: 0,
           backgroundColor: Colors.white,
         ),
-        body: Column(
-          children: List.generate(controllers.length, (index) {
+        body: ListView.builder(
+          itemCount: controllers.length,
+          itemBuilder: (_, index) {
             return SizedBox(
               width: width,
               child: Column(
@@ -77,11 +109,22 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
                       ),
-                      child: TextFormField(
+                      width: width,
+                      child: TextField(
                         controller: titleController,
+                        textInputAction: TextInputAction.go,
+                        maxLines: 100,
+                        minLines: 1,
+                        maxLength: 250,
+                        onSubmitted: (_) {
+                          FocusScope.of(context)
+                              .requestFocus(controllers.first['focus']);
+                        },
+                        onChanged: (_) => save(),
                         decoration: const InputDecoration(
                           hintText: "Title",
                           border: InputBorder.none,
+                          counterText: "",
                         ),
                       ),
                     ),
@@ -98,6 +141,7 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                             onChanged: (_) {
                               controllers[index]['checklist'] = _;
                               setState(() {});
+                              save();
                             },
                           ),
                         ),
@@ -109,7 +153,22 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                             width: width,
                             // color: Colors.black,
                             child: TextField(
+                              focusNode: controllers[index]['focus'],
                               controller: controllers[index]['controller'],
+                              textInputAction: TextInputAction.go,
+                              onChanged: (_) => save(),
+                              onSubmitted: (_) async {
+                                controllers.insert(index + 1, {
+                                  "controller": TextEditingController(),
+                                  "checklist": false,
+                                  "focus": FocusNode(),
+                                });
+                                setState(() {});
+                                await Future.delayed(
+                                    const Duration(milliseconds: 100));
+                                FocusScope.of(context).requestFocus(
+                                    controllers[index + 1]['focus']);
+                              },
                               minLines: 1,
                               maxLines: 10,
                               maxLength: 250,
@@ -183,7 +242,7 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                 ],
               ),
             );
-          }),
+          },
         ),
       ),
     );

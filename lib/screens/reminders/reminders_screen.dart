@@ -99,7 +99,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
                                   width: width,
                                   child: Text(
                                     d.get("title") ?? "",
-                                    maxLines: 1,
+                                    maxLines: 100,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
