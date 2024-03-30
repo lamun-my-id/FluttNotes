@@ -18,6 +18,8 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
   late DateTime time;
   DataItem? data;
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +38,27 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
     double width = MediaQuery.of(context).size.width;
     // double height = MediaQuery.of(context).size.height;
     NotesProvider n = Provider.of<NotesProvider>(context);
+
+    Future<void> save() async {
+      try {
+        if (isLoading) throw "Sedang Loading";
+        isLoading = true;
+        setState(() {});
+        DataItem? result = await n.save(
+          title: titleController.text,
+          content: contentController.text,
+          id: data?.id,
+        );
+        if (result != null && data == null) {
+          data = result;
+        }
+      } catch (e) {
+        //
+      }
+      isLoading = false;
+      setState(() {});
+    }
+
     return PopScope(
       canPop: true,
       onPopInvoked: (_) async {
@@ -60,6 +83,8 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
             children: [
               TextFormField(
                 controller: titleController,
+                textInputAction: TextInputAction.go,
+                onChanged: (_) => save(),
                 decoration: const InputDecoration(
                   hintText: "Title",
                   border: InputBorder.none,
@@ -79,6 +104,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                 controller: contentController,
                 minLines: 5,
                 maxLines: 100,
+                onChanged: (_) => save(),
                 decoration: const InputDecoration(
                   hintText: "Start Typing",
                   border: InputBorder.none,

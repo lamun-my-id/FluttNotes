@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.7.0
-  google_fonts: ^6.2.1
+  google_fonts: ^6.2.0
   provider: 6.0.5
 
 dev_dependencies:

@@ -13,8 +13,11 @@ class NotesProvider with ChangeNotifier {
 
   initialize() async {
     // print("object");
-    data = await DataLocal.create("notes2",
-        onRefresh: () => refresh(), debugMode: true);
+    data = await DataLocal.create(
+      "notes2",
+      onRefresh: () => refresh(),
+      // debugMode: true,
+    );
     data.onRefresh = () {
       refresh();
     };
@@ -25,6 +28,24 @@ class NotesProvider with ChangeNotifier {
 
   void refresh() {
     notifyListeners();
+  }
+
+  Future<DataItem?> save(
+      {String? id, required String title, required String content}) async {
+    if (id != null) {
+      if (title.isNotEmpty || content.isNotEmpty) {
+        return await onUpdate(id, title: title, content: content);
+      }
+    } else {
+      if (title.isNotEmpty || content.isNotEmpty) {
+        return await data.insertOne({
+          "title": title,
+          "content": content,
+          "updatedAt": DateTime.now(),
+        });
+      }
+    }
+    return null;
   }
 
   onSave({String? id, required String title, required String content}) async {
