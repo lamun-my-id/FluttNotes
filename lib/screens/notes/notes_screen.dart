@@ -57,16 +57,19 @@ class _NotesScreenState extends State<NotesScreen> {
                   );
                 }
                 return ListView.builder(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16,
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    left: 16,
+                    right: 16,
+                    bottom: 86,
+                    // vertical: 16,
                   ),
                   itemCount: n.data.count,
                   itemBuilder: (_, index) {
                     DataItem d = n.data.data[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(
-                        vertical: 8,
+                        vertical: 4,
                       ),
                       child: InkWell(
                         onTap: () {

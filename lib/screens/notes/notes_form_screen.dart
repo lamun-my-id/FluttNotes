@@ -20,6 +20,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
   DataItem? data;
 
   bool isLoading = false;
+  FocusNode formFocus = FocusNode();
 
   @override
   void initState() {
@@ -85,13 +86,19 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
           ),
           child: Column(
             children: [
-              TextFormField(
+              TextField(
                 controller: titleController,
+                minLines: 1,
+                maxLines: 100,
+                maxLength: 500,
                 textInputAction: TextInputAction.go,
                 onChanged: (_) => save(),
+                onSubmitted: (_) =>
+                    FocusScope.of(context).requestFocus(formFocus),
                 decoration: const InputDecoration(
                   hintText: "Title",
                   border: InputBorder.none,
+                  counterText: "",
                 ),
                 style: TextStyle(
                   fontSize: fontSize,
@@ -107,17 +114,21 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                   ),
                 ),
               ),
-              TextFormField(
-                controller: contentController,
-                minLines: 5,
-                maxLines: 100,
-                onChanged: (_) => save(),
-                decoration: const InputDecoration(
-                  hintText: "Start Typing",
-                  border: InputBorder.none,
-                ),
-                style: TextStyle(
-                  fontSize: fontSize,
+              SizedBox(
+                width: width,
+                child: TextField(
+                  focusNode: formFocus,
+                  controller: contentController,
+                  minLines: 5,
+                  maxLines: 5000,
+                  onChanged: (_) => save(),
+                  decoration: const InputDecoration(
+                    hintText: "Start Typing",
+                    border: InputBorder.none,
+                  ),
+                  style: TextStyle(
+                    fontSize: fontSize,
+                  ),
                 ),
               ),
             ],
