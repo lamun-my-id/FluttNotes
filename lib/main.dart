@@ -4,9 +4,11 @@ import 'package:fluttnotes/providers/notes_provider.dart';
 import 'package:fluttnotes/providers/reminders_provider.dart';
 import 'package:fluttnotes/screens/home.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  await initializeDateFormatting();
   runApp(const MyApp());
 }
 
