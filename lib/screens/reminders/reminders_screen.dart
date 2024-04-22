@@ -1,8 +1,9 @@
 import 'package:datalocal/datalocal.dart';
-import 'package:datalocal/utils/date_time.dart';
+import 'package:datalocal/datalocal_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttnotes/providers/reminders_provider.dart';
 import 'package:fluttnotes/screens/reminders/reminders_form_screen.dart';
+import 'package:fluttnotes/utils/date_time_util.dart';
 import 'package:provider/provider.dart';
 
 class RemindersScreen extends StatefulWidget {

@@ -1,4 +1,5 @@
 import 'package:datalocal/datalocal.dart';
+import 'package:datalocal/datalocal_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttnotes/providers/app_provider.dart';
 import 'package:fluttnotes/providers/reminders_provider.dart';
