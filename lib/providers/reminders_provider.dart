@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class RemindersProvider with ChangeNotifier {
   late DataLocal data;
   bool isLoading = false;
+  List<DataItem> reminders = [];
 
   RemindersProvider() {
     isLoading = true;
@@ -17,7 +18,15 @@ class RemindersProvider with ChangeNotifier {
       onRefresh: () => refresh(),
       // debugMode: true,
     );
-    data.onRefresh = () {
+    data.onRefresh = () async {
+      reminders = await data.find(
+        sorts: [
+          DataSort(
+            key: "createdAt",
+            desc: true,
+          ),
+        ],
+      );
       refresh();
     };
     data.refresh();

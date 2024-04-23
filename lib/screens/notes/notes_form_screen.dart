@@ -227,7 +227,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                                   right: 16,
                                   top: 16,
                                   child: Container(
-                                    width: 250,
+                                    width: 200,
                                     height: 180,
                                     decoration: BoxDecoration(
                                       color: Colors.white,

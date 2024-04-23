@@ -4,6 +4,7 @@ import 'package:datalocal/datalocal.dart';
 class NotesProvider with ChangeNotifier {
   late DataLocal data;
   bool isLoading = false;
+  List<DataItem> notes = [];
 
   NotesProvider() {
     isLoading = true;
@@ -18,7 +19,12 @@ class NotesProvider with ChangeNotifier {
       onRefresh: () => refresh(),
       // debugMode: true,
     );
-    data.onRefresh = () {
+    data.onRefresh = () async {
+      notes = await data.find(
+        sorts: [
+          DataSort(key: "createdAt", desc: true),
+        ],
+      );
       refresh();
     };
     data.refresh();
