@@ -28,8 +28,8 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
     super.initState();
     data = widget.value;
     if (data != null) {
-      titleController.text = data!.get("title");
-      contentController.text = data!.get("content");
+      titleController.text = data!.get(DataKey("title"));
+      contentController.text = data!.get(DataKey("content"));
       time = data!.createdAt ?? DateTime.now();
     } else {
       time = DateTime.now();
@@ -43,7 +43,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
     NotesProvider n = Provider.of<NotesProvider>(context);
     AppProvider a = Provider.of<AppProvider>(context);
 
-    double fontSize = (a.appSetting.get("fontSize.value") ?? 14) * 1.0;
+    double fontSize = (a.appSetting.get(DataKey("fontSize.value")) ?? 14) * 1.0;
 
     Future<void> save() async {
       try {

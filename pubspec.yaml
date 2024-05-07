@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   cupertino_icons: ^1.0.6
-  datalocal: ^1.0.8
+  datalocal: ^1.0.12
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.7.0

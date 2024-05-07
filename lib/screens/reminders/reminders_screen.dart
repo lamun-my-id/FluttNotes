@@ -103,7 +103,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
                                   SizedBox(
                                     width: width,
                                     child: Text(
-                                      d.get("title") ?? "",
+                                      d.get(DataKey("title")) ?? "",
                                       maxLines: 100,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -114,10 +114,11 @@ class _RemindersScreenState extends State<RemindersScreen> {
                                   ),
                                   Column(
                                     children: List.generate(
-                                        (d.get("content") ?? []).length,
-                                        (index2) {
+                                        (d.get(DataKey("content")) ?? [])
+                                            .length, (index2) {
                                       Map<String, dynamic> task =
-                                          (d.get("content") ?? [])[index2];
+                                          (d.get(DataKey("content")) ??
+                                              [])[index2];
                                       return SizedBox(
                                         width: width,
                                         child: Row(
@@ -135,12 +136,15 @@ class _RemindersScreenState extends State<RemindersScreen> {
                                                   setState(() {});
                                                   r.onSave(
                                                     id: d.id,
-                                                    title: d.get('title'),
-                                                    date: d.get("date"),
+                                                    title:
+                                                        d.get(DataKey('title')),
+                                                    date:
+                                                        d.get(DataKey("date")),
                                                     content: List<
                                                             Map<String,
                                                                 dynamic>>.from(
-                                                        (d.get("content") ??
+                                                        (d.get(DataKey(
+                                                                "content")) ??
                                                             [])),
                                                   );
                                                   // print("saved");
@@ -179,7 +183,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
                                     child: Text(
                                       DateTimeUtils.dateFormat(
                                             d.createdAt ??
-                                                d.get("createdAt") ??
+                                                d.get(DataKey("createdAt")) ??
                                                 "",
                                             format: "MMMM dd",
                                             locale: "en",

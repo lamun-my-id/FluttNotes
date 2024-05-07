@@ -69,10 +69,10 @@ packages:
     dependency: "direct main"
     description:
       name: datalocal
-      sha256: cb15fe8e305b46c70635d4416237dd4ee3e79f3aa4d81a1f5b4014a7931e2a2a
+      sha256: "2690dd60b4b7ddd411b77c2479574c36f0d573a75b4c9556d14d748558f1fa69"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.8"
+    version: "1.0.12"
   fake_async:
     dependency: transitive
     description:

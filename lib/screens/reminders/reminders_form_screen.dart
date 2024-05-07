@@ -32,15 +32,16 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
     super.initState();
     if (widget.value != null) {
       data = widget.value!;
-      titleController.text = data!.get("title");
-      controllers = List<Map<String, dynamic>>.from(data!.get("content") ?? {})
-          .map((e) => {
-                "controller":
-                    TextEditingController(text: e['controller'] ?? ""),
-                "checklist": e['checklist'],
-                "focus": FocusNode(),
-              })
-          .toList();
+      titleController.text = data!.get(DataKey("title"));
+      controllers =
+          List<Map<String, dynamic>>.from(data!.get(DataKey("content")) ?? {})
+              .map((e) => {
+                    "controller":
+                        TextEditingController(text: e['controller'] ?? ""),
+                    "checklist": e['checklist'],
+                    "focus": FocusNode(),
+                  })
+              .toList();
       setState(() {});
     }
   }
@@ -51,7 +52,7 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
     // double height = MediaQuery.of(context).size.height;
     RemindersProvider r = Provider.of<RemindersProvider>(context);
     AppProvider a = Provider.of<AppProvider>(context);
-    double fontSize = (a.appSetting.get("fontSize.value") ?? 14) * 1.0;
+    double fontSize = (a.appSetting.get(DataKey("fontSize.value")) ?? 14) * 1.0;
 
     save() async {
       try {

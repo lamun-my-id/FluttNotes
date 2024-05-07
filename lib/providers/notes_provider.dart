@@ -22,7 +22,7 @@ class NotesProvider with ChangeNotifier {
     data.onRefresh = () async {
       notes = await data.find(
         sorts: [
-          DataSort(key: "createdAt", desc: true),
+          DataSort(key: DataKey("createdAt"), desc: true),
         ],
       );
       refresh();

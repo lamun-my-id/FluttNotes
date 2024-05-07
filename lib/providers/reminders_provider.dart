@@ -22,7 +22,7 @@ class RemindersProvider with ChangeNotifier {
       reminders = await data.find(
         sorts: [
           DataSort(
-            key: "createdAt",
+            key: DataKey("createdAt"),
             desc: true,
           ),
         ],

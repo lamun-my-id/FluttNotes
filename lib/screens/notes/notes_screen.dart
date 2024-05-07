@@ -102,7 +102,7 @@ class _NotesScreenState extends State<NotesScreen> {
                                 SizedBox(
                                   width: width,
                                   child: Text(
-                                    d.get("title") ?? "",
+                                    d.get(DataKey("title")) ?? "",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
@@ -114,7 +114,7 @@ class _NotesScreenState extends State<NotesScreen> {
                                 SizedBox(
                                   width: width,
                                   child: Text(
-                                    d.get("content") ?? "",
+                                    d.get(DataKey("content")) ?? "",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(),
@@ -128,7 +128,7 @@ class _NotesScreenState extends State<NotesScreen> {
                                   child: Text(
                                     DateTimeUtils.dateFormat(
                                           d.createdAt ??
-                                              d.get("createdAt") ??
+                                              d.get(DataKey("createdAt")) ??
                                               "",
                                           format: "MMMM dd",
                                           locale: "en",

@@ -1,3 +1,4 @@
+import 'package:datalocal/datalocal.dart';
 import 'package:datalocal/datalocal_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttnotes/providers/app_provider.dart';
@@ -189,7 +190,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             width: 4,
                           ),
                           Text(
-                            ("${a.appSetting.get("fontSize.id") ?? ""}"),
+                            ("${a.appSetting.get(DataKey("fontSize.id")) ?? ""}"),
                           ),
                           const SizedBox(
                             width: 4,
@@ -274,7 +275,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             width: 4,
                           ),
                           Text(
-                            "${a.appSetting.get("sort.id") ?? ""}",
+                            "${a.appSetting.get(DataKey("sort.id")) ?? ""}",
                           ),
                           const SizedBox(
                             width: 4,
