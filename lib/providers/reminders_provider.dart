@@ -5,6 +5,7 @@ class RemindersProvider with ChangeNotifier {
   late DataLocal data;
   bool isLoading = false;
   List<DataItem> reminders = [];
+  Map<String, dynamic> sort = {"value": "updatedAt"};
 
   RemindersProvider() {
     isLoading = true;
@@ -22,8 +23,8 @@ class RemindersProvider with ChangeNotifier {
       reminders = await data.find(
         sorts: [
           DataSort(
-            key: DataKey("createdAt"),
-            desc: true,
+            key: DataKey(sort['value'], onKeyCatch: "createdAt"),
+            desc: sort['desc'] ?? true,
           ),
         ],
       );
@@ -32,6 +33,12 @@ class RemindersProvider with ChangeNotifier {
     data.refresh();
     isLoading = false;
     refresh();
+  }
+
+  void changeSort(Map<String, dynamic> value) {
+    sort = value;
+    refresh();
+    data.refresh();
   }
 
   Future<DataItem?> save({

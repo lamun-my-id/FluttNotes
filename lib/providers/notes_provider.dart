@@ -5,6 +5,7 @@ class NotesProvider with ChangeNotifier {
   late DataLocal data;
   bool isLoading = false;
   List<DataItem> notes = [];
+  Map<String, dynamic> sort = {"value": "updatedAt"};
 
   NotesProvider() {
     isLoading = true;
@@ -15,14 +16,17 @@ class NotesProvider with ChangeNotifier {
   initialize() async {
     // print("object");
     data = await DataLocal.create(
-      "notes2",
+      "notes",
       onRefresh: () => refresh(),
       // debugMode: true,
     );
     data.onRefresh = () async {
       notes = await data.find(
         sorts: [
-          DataSort(key: DataKey("createdAt"), desc: true),
+          DataSort(
+            key: DataKey(sort['value'], onKeyCatch: "createdAt"),
+            desc: sort['desc'] ?? true,
+          ),
         ],
       );
       refresh();
@@ -34,6 +38,12 @@ class NotesProvider with ChangeNotifier {
 
   void refresh() {
     notifyListeners();
+  }
+
+  void changeSort(Map<String, dynamic> value) {
+    sort = value;
+    refresh();
+    data.refresh();
   }
 
   Future<DataItem?> save(

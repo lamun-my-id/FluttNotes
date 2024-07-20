@@ -20,9 +20,15 @@ class AppProvider with ChangeNotifier {
   ];
 
   List<Map<String, dynamic>> sortOptions = [
-    {"id": "By creation date", "value": "#createdAt"},
-    {"id": "By modification date", "value": "#updatedAt"},
+    {"id": "By creation date (A~Z)", "value": "createdAt", "desc": false},
+    {"id": "By creation date (Z~A)", "value": "createdAt", "desc": true},
+    {"id": "By modification date (A~Z)", "value": "updatedAt", "desc": false},
+    {"id": "By modification date (Z~A)", "value": "updatedAt", "desc": true},
+    {"id": "By title (A~Z)", "value": "title", "desc": false},
+    {"id": "By title (Z~A)", "value": "title", "desc": true},
   ];
+
+  List<Map<String, dynamic>> sortType = [];
 
   Future<void> initialize() async {
     data = await DataLocal.create(
