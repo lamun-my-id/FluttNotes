@@ -1,6 +1,10 @@
 name: fluttnotes
 description: "Flutter notes use data local"
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
+# flutter build appbundle --release --no-tree-shake-icons
+# flutter build web --release --no-tree-shake-icons
+# firebase deploy --only hosting:lamun-mail
+# flutter pub upgrade --major-versions
 
 version: 1.0.0+1
 
@@ -9,7 +13,7 @@ environment:
 
 dependencies:
   cupertino_icons: ^1.0.6
-  datalocal: ^1.0.12
+  datalocal: ^1.0.17
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.7.0
