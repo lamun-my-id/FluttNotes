@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttnotes/providers/app_provider.dart';
 import 'package:fluttnotes/providers/notes_provider.dart';
 import 'package:fluttnotes/providers/reminders_provider.dart';
+import 'package:fluttnotes/screens/categories/categories_screen.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -313,7 +314,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                   InkWell(
-                    onTap: () async {},
+                    onTap: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CategoriesScreen(),
+                        ),
+                      );
+                    },
                     child: SizedBox(
                       width: width,
                       height: 40,

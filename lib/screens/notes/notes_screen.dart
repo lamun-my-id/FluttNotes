@@ -1,6 +1,7 @@
 import 'package:datalocal/datalocal.dart';
 import 'package:datalocal/datalocal_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/providers/categories_provider.dart';
 import 'package:fluttnotes/providers/notes_provider.dart';
 import 'package:fluttnotes/screens/notes/notes_form_screen.dart';
 import 'package:fluttnotes/utils/date_time_util.dart';
@@ -19,6 +20,7 @@ class _NotesScreenState extends State<NotesScreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     NotesProvider n = Provider.of<NotesProvider>(context);
+    CategoriesProvider c = Provider.of<CategoriesProvider>(context);
     return Scaffold(
       body: Container(
         width: width,
@@ -26,7 +28,96 @@ class _NotesScreenState extends State<NotesScreen> {
         color: Colors.white,
         child: Column(
           children: [
-            Container(),
+            SizedBox(
+              width: width,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        n.changeCategory(null);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: n.category == null
+                              ? const Color(0xFFFCFCFD)
+                              : Colors.grey[200]!,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text("All"),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        n.changeCategory({"id": null});
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: n.category != null && n.category!['id'] == null
+                              ? const Color(0xFFFCFCFD)
+                              : Colors.grey[200]!,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text("Uncategorized"),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Row(
+                      children: List.generate(c.categories.length, (_) {
+                        DataItem d = c.categories[_];
+                        return Row(
+                          children: [
+                            if (_ > 0)
+                              const SizedBox(
+                                width: 8,
+                              ),
+                            InkWell(
+                              onTap: () {
+                                n.changeCategory({
+                                  "id": d.id,
+                                  "name": d.get(DataKey("name")),
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: n.category != null &&
+                                          n.category!['id'] == d.id
+                                      ? const Color(0xFFFCFCFD)
+                                      : Colors.grey[200]!,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(d.get(DataKey("name")) ?? ""),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             Expanded(
               child: Builder(
                 builder: (_) {
@@ -99,6 +190,18 @@ class _NotesScreenState extends State<NotesScreen> {
                             ),
                             child: Column(
                               children: [
+                                // SizedBox(
+                                //   width: width,
+                                //   child: Text(
+                                //     d.get(DataKey("category")) ?? "",
+                                //     maxLines: 1,
+                                //     overflow: TextOverflow.ellipsis,
+                                //     style: const TextStyle(
+                                //       fontWeight: FontWeight.bold,
+                                //       fontSize: 16,
+                                //     ),
+                                //   ),
+                                // ),
                                 SizedBox(
                                   width: width,
                                   child: Text(

@@ -6,6 +6,7 @@ class NotesProvider with ChangeNotifier {
   bool isLoading = false;
   List<DataItem> notes = [];
   Map<String, dynamic> sort = {"value": "updatedAt"};
+  Map<String, dynamic>? category;
 
   NotesProvider() {
     isLoading = true;
@@ -28,6 +29,14 @@ class NotesProvider with ChangeNotifier {
             desc: sort['desc'] ?? true,
           ),
         ],
+        filters: category == null
+            ? null
+            : category!['id'] == null
+                ? [DataFilter(key: DataKey("category"), value: null)]
+                : [
+                    DataFilter(
+                        key: DataKey("category.id"), value: category!['id'])
+                  ],
       );
       refresh();
     };
@@ -46,6 +55,12 @@ class NotesProvider with ChangeNotifier {
     data.refresh();
   }
 
+  void changeCategory(Map<String, dynamic>? value) {
+    category = value;
+    refresh();
+    data.refresh();
+  }
+
   Future<DataItem?> save(
       {String? id, required String title, required String content}) async {
     if (id != null) {
@@ -58,6 +73,7 @@ class NotesProvider with ChangeNotifier {
           "title": title,
           "content": content,
           "updatedAt": DateTime.now(),
+          "category": category,
         });
       }
     }
@@ -77,6 +93,7 @@ class NotesProvider with ChangeNotifier {
           "title": title,
           "content": content,
           "updatedAt": DateTime.now(),
+          "category": category,
         });
       }
     }
@@ -87,6 +104,7 @@ class NotesProvider with ChangeNotifier {
       "title": title,
       "content": content,
       "updatedAt": DateTime.now(),
+      "category": category,
     });
   }
 

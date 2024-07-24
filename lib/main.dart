@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttnotes/providers/app_provider.dart';
+import 'package:fluttnotes/providers/categories_provider.dart';
 import 'package:fluttnotes/providers/notes_provider.dart';
 import 'package:fluttnotes/providers/reminders_provider.dart';
 import 'package:fluttnotes/screens/home.dart';
@@ -22,6 +23,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AppProvider>(
           create: (_) => AppProvider(),
+        ),
+        ChangeNotifierProvider<CategoriesProvider>(
+          create: (_) => CategoriesProvider(),
         ),
         ChangeNotifierProvider<NotesProvider>(
           create: (_) => NotesProvider(),

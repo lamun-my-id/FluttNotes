@@ -1,22 +1,21 @@
 import 'package:datalocal/datalocal.dart';
 import 'package:datalocal/datalocal_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttnotes/providers/app_provider.dart';
-import 'package:fluttnotes/providers/notes_provider.dart';
+import 'package:fluttnotes/providers/categories_provider.dart';
 import 'package:fluttnotes/utils/date_time_util.dart';
 import 'package:provider/provider.dart';
 
-class NotesFormScreen extends StatefulWidget {
+class CategoriesFormScreen extends StatefulWidget {
   final DataItem? value;
-  const NotesFormScreen({super.key, this.value});
+
+  const CategoriesFormScreen({super.key, this.value});
 
   @override
-  State<NotesFormScreen> createState() => _NotesFormScreenState();
+  State<CategoriesFormScreen> createState() => _CategoriesFormScreenState();
 }
 
-class _NotesFormScreenState extends State<NotesFormScreen> {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController contentController = TextEditingController();
+class _CategoriesFormScreenState extends State<CategoriesFormScreen> {
+  TextEditingController nameController = TextEditingController();
   late DateTime time;
   DataItem? data;
 
@@ -28,31 +27,27 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
     super.initState();
     data = widget.value;
     if (data != null) {
-      titleController.text = data!.get(DataKey("title"));
-      contentController.text = data!.get(DataKey("content"));
+      nameController.text = data!.get(DataKey("name"));
       time = data!.createdAt ?? DateTime.now();
     } else {
       time = DateTime.now();
     }
+    FocusScope.of(context).requestFocus(formFocus);
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     // double height = MediaQuery.of(context).size.height;
-    NotesProvider n = Provider.of<NotesProvider>(context);
-    AppProvider a = Provider.of<AppProvider>(context);
-
-    double fontSize = (a.appSetting.get(DataKey("fontSize.value")) ?? 14) * 1.0;
+    CategoriesProvider c = Provider.of<CategoriesProvider>(context);
 
     Future<void> save() async {
       try {
         if (isLoading) throw "Sedang Loading";
         isLoading = true;
         setState(() {});
-        DataItem? result = await n.save(
-          title: titleController.text,
-          content: contentController.text,
+        DataItem? result = await c.save(
+          name: nameController.text,
           id: data?.id,
         );
         if (result != null && data == null) {
@@ -154,8 +149,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
-                                      titleController.text = "";
-                                      contentController.text = "";
+                                      nameController.text = "";
                                       Navigator.pop(context);
                                       Navigator.pop(context);
                                     },
@@ -195,9 +189,8 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
     return PopScope(
       canPop: true,
       onPopInvoked: (_) async {
-        n.onSave(
-          title: titleController.text,
-          content: contentController.text,
+        c.onSave(
+          name: nameController.text,
           id: data?.id,
         );
         // Navigator.pop(context);
@@ -207,7 +200,6 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           actions: [
-            // Text(n.category?['name'] ?? ""),
             if (data != null)
               IconButton(
                 onPressed: () {
@@ -308,7 +300,8 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
           child: Column(
             children: [
               TextField(
-                controller: titleController,
+                focusNode: formFocus,
+                controller: nameController,
                 minLines: 1,
                 maxLines: 100,
                 maxLength: 500,
@@ -321,40 +314,23 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                   border: InputBorder.none,
                   counterText: "",
                 ),
-                style: TextStyle(
-                  fontSize: fontSize + 4,
+                style: const TextStyle(
                   fontWeight: FontWeight.w600,
                 ),
               ),
               SizedBox(
                 width: width,
                 child: Text(
-                  "${DateTimeUtils.dateFormat(time, format: "MMMM dd HH:mm", locale: "en") ?? ""} | ${contentController.text.length} characters",
+                  DateTimeUtils.dateFormat(time,
+                          format: "MMMM dd HH:mm", locale: "en") ??
+                      "",
                   style: TextStyle(
                     color: Colors.grey[400]!,
-                    fontSize: fontSize - 2,
                   ),
                 ),
               ),
               const SizedBox(
                 height: 16,
-              ),
-              SizedBox(
-                width: width,
-                child: TextField(
-                  focusNode: formFocus,
-                  controller: contentController,
-                  minLines: 5,
-                  maxLines: 5000,
-                  onChanged: (_) => save(),
-                  decoration: const InputDecoration(
-                    hintText: "Start Typing",
-                    border: InputBorder.none,
-                  ),
-                  style: TextStyle(
-                    fontSize: fontSize,
-                  ),
-                ),
               ),
             ],
           ),
