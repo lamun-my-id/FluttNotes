@@ -4,7 +4,6 @@ import 'package:datalocal/datalocal.dart';
 class CategoriesProvider with ChangeNotifier {
   late DataLocal data;
   bool isLoading = false;
-  List<DataItem> categories = [];
   Map<String, dynamic> sort = {"value": "updatedAt"};
 
   CategoriesProvider() {
@@ -21,14 +20,15 @@ class CategoriesProvider with ChangeNotifier {
       // debugMode: true,
     );
     data.onRefresh = () async {
-      categories = await data.find(
-        sorts: [
-          DataSort(
-            key: DataKey(sort['value'], onKeyCatch: "createdAt"),
-            desc: sort['desc'] ?? true,
-          ),
-        ],
-      );
+      // categories = (await data.find(
+      //   sorts: [
+      //     DataSort(
+      //       key: DataKey(sort['value'], onKeyCatch: "createdAt"),
+      //       desc: sort['desc'] ?? true,
+      //     ),
+      //   ],
+      // ))
+      //     .data;
       refresh();
     };
     data.refresh();
@@ -87,6 +87,6 @@ class CategoriesProvider with ChangeNotifier {
   }
 
   onDeleted(String id) async {
-    data.deleteOne(id);
+    data.removeOne(id);
   }
 }

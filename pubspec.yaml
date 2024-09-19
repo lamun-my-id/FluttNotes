@@ -6,14 +6,14 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # firebase deploy --only hosting:lamun-mail
 # flutter pub upgrade --major-versions
 
-version: 1.0.0+2
+version: 1.0.0+4
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   cupertino_icons: ^1.0.6
-  datalocal: ^1.0.17
+  datalocal: ^1.0.24
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.7.0

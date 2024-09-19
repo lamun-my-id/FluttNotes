@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 class RemindersProvider with ChangeNotifier {
   late DataLocal data;
   bool isLoading = false;
-  List<DataItem> reminders = [];
   Map<String, dynamic> sort = {"value": "updatedAt"};
 
   RemindersProvider() {
@@ -20,14 +19,6 @@ class RemindersProvider with ChangeNotifier {
       // debugMode: true,
     );
     data.onRefresh = () async {
-      reminders = await data.find(
-        sorts: [
-          DataSort(
-            key: DataKey(sort['value'], onKeyCatch: "createdAt"),
-            desc: sort['desc'] ?? true,
-          ),
-        ],
-      );
       refresh();
     };
     data.refresh();
@@ -102,7 +93,7 @@ class RemindersProvider with ChangeNotifier {
   }
 
   onDeleted(String id) async {
-    data.deleteOne(id);
+    data.removeOne(id);
   }
 
   void refresh() {

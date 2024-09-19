@@ -35,86 +35,105 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 child: CircularProgressIndicator(),
               );
             }
-            if (c.categories.isEmpty) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.edit_note_rounded,
-                    size: 32,
-                    color: Color(0xFF1F325D),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    "No categories here yet",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[400]!,
-                    ),
+            return FutureBuilder<DataQuery>(
+              future: c.data.find(
+                sorts: [
+                  DataSort(
+                    key: DataKey(c.sort['value'], onKeyCatch: "createdAt"),
+                    desc: c.sort['desc'] ?? true,
                   ),
                 ],
-              );
-            }
-            return ListView.builder(
-              padding: const EdgeInsets.only(
-                top: 16,
-                left: 16,
-                right: 16,
-                bottom: 86,
-                // vertical: 16,
               ),
-              itemCount: c.categories.length,
-              itemBuilder: (_, index) {
-                DataItem d = c.categories[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 4,
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => CategoriesFormScreen(
-                            value: d,
-                          ),
+              builder: (_, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                DataQuery query = snapshot.data!;
+                List<DataItem> datas = query.data;
+                if (datas.isEmpty) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.edit_note_rounded,
+                        size: 32,
+                        color: Color(0xFF1F325D),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        "No categories here yet",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[400]!,
                         ),
-                      );
-                    },
-                    child: Container(
+                      ),
+                    ],
+                  );
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    left: 16,
+                    right: 16,
+                    bottom: 86,
+                    // vertical: 16,
+                  ),
+                  itemCount: datas.length,
+                  itemBuilder: (_, index) {
+                    DataItem d = datas[index];
+                    return Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 16,
+                        vertical: 4,
                       ),
-                      height: 60,
-                      width: width,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFCFCFD),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: const Color(0xFFE4E7EC)),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: width,
-                            child: Text(
-                              d.get(DataKey("name")) ?? "",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => CategoriesFormScreen(
+                                value: d,
                               ),
                             ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
                           ),
-                        ],
+                          height: 60,
+                          width: width,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFCFCFD),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: const Color(0xFFE4E7EC)),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: width,
+                                child: Text(
+                                  d.get(DataKey("name")) ?? "",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 );
               },
             );

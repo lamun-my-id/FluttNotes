@@ -36,10 +36,10 @@ class AppProvider with ChangeNotifier {
       onRefresh: () => refresh(),
       // debugMode: true,
     );
-    data.onRefresh = () {
+    data.onRefresh = () async {
       if (data.count < 1) {
       } else {
-        appSetting = data.data.first;
+        appSetting = (await data.find()).data.first;
       }
       refresh();
     };
