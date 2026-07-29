@@ -1,6 +1,6 @@
 import 'package:datalocal/datalocal.dart';
-import 'package:datalocal/datalocal_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/data/map_document.dart';
 import 'package:fluttnotes/providers/categories_provider.dart';
 import 'package:fluttnotes/providers/notes_provider.dart';
 import 'package:fluttnotes/screens/notes/notes_form_screen.dart';
@@ -15,12 +15,29 @@ class NotesScreen extends StatefulWidget {
 }
 
 class _NotesScreenState extends State<NotesScreen> {
+  DataLocalQuery<Map<String, Object?>> _notesQuery(NotesProvider provider) {
+    var query = provider.data.query();
+    final category = provider.category;
+    if (category != null) {
+      query = category['id'] == null
+          ? query.where('category', isNull: true)
+          : query.where('category.id', isEqualTo: category['id']);
+    }
+    return query.orderBy(
+      provider.sort['value'] ?? 'createdAt',
+      descending: provider.sort['desc'] ?? true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     NotesProvider n = Provider.of<NotesProvider>(context);
     CategoriesProvider c = Provider.of<CategoriesProvider>(context);
+    if (n.isLoading || c.isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       body: Container(
         width: width,
@@ -31,9 +48,7 @@ class _NotesScreenState extends State<NotesScreen> {
             SizedBox(
               width: width,
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
@@ -55,9 +70,7 @@ class _NotesScreenState extends State<NotesScreen> {
                         child: const Text("All"),
                       ),
                     ),
-                    const SizedBox(
-                      width: 8,
-                    ),
+                    const SizedBox(width: 8),
                     InkWell(
                       onTap: () {
                         n.changeCategory({"id": null});
@@ -76,19 +89,15 @@ class _NotesScreenState extends State<NotesScreen> {
                         child: const Text("Uncategorized"),
                       ),
                     ),
-                    const SizedBox(
-                      width: 8,
-                    ),
+                    const SizedBox(width: 8),
                     FutureBuilder<DataQuery>(
-                      future: c.data.find(
-                        sorts: [
-                          DataSort(
-                            key: DataKey(c.sort['value'],
-                                onKeyCatch: "createdAt"),
-                            desc: c.sort['desc'] ?? true,
-                          ),
-                        ],
-                      ),
+                      future: c.data
+                          .query()
+                          .orderBy(
+                            c.sort['value'] ?? 'createdAt',
+                            descending: c.sort['desc'] ?? true,
+                          )
+                          .get(),
                       builder: (_, snapshot) {
                         if (!snapshot.hasData) {
                           return const SizedBox();
@@ -96,14 +105,11 @@ class _NotesScreenState extends State<NotesScreen> {
                         DataQuery query = snapshot.data!;
                         List<DataItem> datas = query.data;
                         return Row(
-                          children: List.generate(datas.length, (_) {
-                            DataItem d = datas[_];
+                          children: List.generate(datas.length, (index) {
+                            DataItem d = datas[index];
                             return Row(
                               children: [
-                                if (_ > 0)
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
+                                if (index > 0) const SizedBox(width: 8),
                                 InkWell(
                                   onTap: () {
                                     n.changeCategory({
@@ -117,7 +123,8 @@ class _NotesScreenState extends State<NotesScreen> {
                                       vertical: 8,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: n.category != null &&
+                                      color:
+                                          n.category != null &&
                                               n.category!['id'] == d.id
                                           ? const Color(0xFFFCFCFD)
                                           : Colors.grey[200]!,
@@ -140,39 +147,13 @@ class _NotesScreenState extends State<NotesScreen> {
               child: Builder(
                 builder: (_) {
                   if (n.isLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const Center(child: CircularProgressIndicator());
                   }
                   return FutureBuilder<DataQuery>(
-                    future: n.data.find(
-                      sorts: [
-                        DataSort(
-                          key:
-                              DataKey(n.sort['value'], onKeyCatch: "createdAt"),
-                          desc: n.sort['desc'] ?? true,
-                        ),
-                      ],
-                      filters: n.category == null
-                          ? null
-                          : n.category!['id'] == null
-                              ? [
-                                  DataFilter(
-                                      key: DataKey("category"), value: null)
-                                ]
-                              : [
-                                  DataFilter(
-                                      key: DataKey("category.id"),
-                                      value: n.category!['id'])
-                                ],
-                    ),
+                    future: _notesQuery(n).get(),
                     builder: (_, snapshot) {
                       if (!snapshot.hasData) {
-                        if (n.isLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
+                        return const Center(child: CircularProgressIndicator());
                       }
                       DataQuery query = snapshot.data!;
                       List<DataItem> datas = query.data;
@@ -187,9 +168,7 @@ class _NotesScreenState extends State<NotesScreen> {
                               size: 32,
                               color: Color(0xFF1F325D),
                             ),
-                            const SizedBox(
-                              height: 8,
-                            ),
+                            const SizedBox(height: 8),
                             Text(
                               "No notes here yet",
                               style: TextStyle(
@@ -212,17 +191,13 @@ class _NotesScreenState extends State<NotesScreen> {
                         itemBuilder: (_, index) {
                           DataItem d = datas[index];
                           return Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 4,
-                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 4),
                             child: InkWell(
                               onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => NotesFormScreen(
-                                      value: d,
-                                    ),
+                                    builder: (_) => NotesFormScreen(value: d),
                                   ),
                                 );
                               },
@@ -237,7 +212,8 @@ class _NotesScreenState extends State<NotesScreen> {
                                   color: const Color(0xFFFCFCFD),
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                      color: const Color(0xFFE4E7EC)),
+                                    color: const Color(0xFFE4E7EC),
+                                  ),
                                 ),
                                 child: Column(
                                   children: [
@@ -274,25 +250,19 @@ class _NotesScreenState extends State<NotesScreen> {
                                         style: const TextStyle(),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
+                                    const SizedBox(height: 4),
                                     SizedBox(
                                       width: width,
                                       child: Text(
                                         DateTimeUtils.dateFormat(
-                                              d.createdAt ??
-                                                  d.get(DataKey("createdAt")) ??
-                                                  "",
+                                              d.createdAt,
                                               format: "MMMM dd",
                                               locale: "en",
                                             ) ??
                                             "",
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                        ),
+                                        style: const TextStyle(fontSize: 10),
                                       ),
                                     ),
                                   ],
@@ -314,21 +284,14 @@ class _NotesScreenState extends State<NotesScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => const NotesFormScreen(),
-            ),
+            MaterialPageRoute(builder: (_) => const NotesFormScreen()),
           );
         },
         backgroundColor: const Color(0xFF1F325D),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(100),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(100)),
         ),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

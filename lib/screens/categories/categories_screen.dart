@@ -1,8 +1,6 @@
-import 'package:datalocal/datalocal.dart';
-import 'package:datalocal/datalocal_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/data/map_document.dart';
 import 'package:fluttnotes/providers/categories_provider.dart';
-import 'package:fluttnotes/providers/notes_provider.dart';
 import 'package:fluttnotes/screens/categories/categories_form_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -19,36 +17,28 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     CategoriesProvider c = Provider.of<CategoriesProvider>(context);
-    NotesProvider n = Provider.of<NotesProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Categories"),
-      ),
+      appBar: AppBar(title: const Text("Categories")),
       body: SizedBox(
         height: height,
         width: width,
         child: Builder(
           builder: (_) {
             if (c.isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
             return FutureBuilder<DataQuery>(
-              future: c.data.find(
-                sorts: [
-                  DataSort(
-                    key: DataKey(c.sort['value'], onKeyCatch: "createdAt"),
-                    desc: c.sort['desc'] ?? true,
-                  ),
-                ],
-              ),
+              future: c.data
+                  .query()
+                  .orderBy(
+                    c.sort['value'] ?? 'createdAt',
+                    descending: c.sort['desc'] ?? true,
+                  )
+                  .get(),
               builder: (_, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 }
                 DataQuery query = snapshot.data!;
                 List<DataItem> datas = query.data;
@@ -62,9 +52,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         size: 32,
                         color: Color(0xFF1F325D),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      const SizedBox(height: 8),
                       Text(
                         "No categories here yet",
                         style: TextStyle(
@@ -87,17 +75,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   itemBuilder: (_, index) {
                     DataItem d = datas[index];
                     return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 4,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 4),
                       child: InkWell(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => CategoriesFormScreen(
-                                value: d,
-                              ),
+                              builder: (_) => CategoriesFormScreen(value: d),
                             ),
                           );
                         },
@@ -144,21 +128,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => const CategoriesFormScreen(),
-            ),
+            MaterialPageRoute(builder: (_) => const CategoriesFormScreen()),
           );
         },
         backgroundColor: const Color(0xFF1F325D),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(100),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(100)),
         ),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

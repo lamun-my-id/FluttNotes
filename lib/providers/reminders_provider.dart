@@ -1,102 +1,106 @@
+import 'dart:async';
+
 import 'package:datalocal/datalocal.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/data/map_document.dart';
 
 class RemindersProvider with ChangeNotifier {
-  late DataLocal data;
+  RemindersProvider(this.data) {
+    _subscription = data.query().watch().listen((_) => notifyListeners());
+  }
+
+  final DataLocalCollection<Map<String, Object?>> data;
+  StreamSubscription<DataLocalQuerySnapshot<Map<String, Object?>>>?
+  _subscription;
   bool isLoading = false;
-  Map<String, dynamic> sort = {"value": "updatedAt"};
-
-  RemindersProvider() {
-    isLoading = true;
-    refresh();
-    initialize();
-  }
-
-  initialize() async {
-    data = await DataLocal.create(
-      "reminder",
-      onRefresh: () => refresh(),
-      // debugMode: true,
-    );
-    data.onRefresh = () async {
-      refresh();
-    };
-    data.refresh();
-    isLoading = false;
-    refresh();
-  }
+  Map<String, dynamic> sort = {"value": "updatedAt", "desc": true};
 
   void changeSort(Map<String, dynamic> value) {
     sort = value;
-    refresh();
-    data.refresh();
+    notifyListeners();
   }
 
-  Future<DataItem?> save({
+  Future<MapDocument?> save({
     String? id,
     required String title,
     required DateTime? date,
     required List<Map<String, dynamic>> content,
   }) async {
-    if (id != null) {
-      if (title.isNotEmpty ||
-          content.length >= 2 ||
-          content.first['controller'].toString().isNotEmpty) {
-        return await onUpdate(id, title: title, content: content);
-      }
-    } else {
-      if (title.isNotEmpty || content.isNotEmpty) {
-        return await data.insertOne({
-          "title": title,
-          "content": content,
-          "updatedAt": DateTime.now(),
-        });
-      }
-    }
-    return null;
+    if (!_hasContent(title, content)) return null;
+    return id == null
+        ? _insert(title: title, date: date, content: content)
+        : onUpdate(id, title: title, date: date, content: content);
   }
 
-  onSave({
+  Future<void> onSave({
     String? id,
     required String title,
     required DateTime? date,
     required List<Map<String, dynamic>> content,
   }) async {
-    if (id != null) {
-      if (title.isNotEmpty ||
-          content.length >= 2 ||
-          content.first['controller'].toString().isNotEmpty) {
-        onUpdate(id, title: title, content: content);
-      } else {
-        onDeleted(id);
+    if (id == null) {
+      if (_hasContent(title, content)) {
+        await _insert(title: title, date: date, content: content);
       }
+    } else if (!_hasContent(title, content)) {
+      await onDeleted(id);
     } else {
-      if (title.isNotEmpty ||
-          content.first['controller'].toString().isNotEmpty) {
-        data.insertOne({
-          "title": title,
-          "content": content,
-          "updatedAt": DateTime.now(),
-        });
-      }
+      await onUpdate(id, title: title, date: date, content: content);
     }
   }
 
-  onUpdate(String id,
-      {required String title,
-      required List<Map<String, dynamic>> content}) async {
-    return await data.updateOne(id, value: {
+  bool _hasContent(String title, List<Map<String, dynamic>> content) {
+    return title.isNotEmpty ||
+        content.any((item) => item['controller'].toString().isNotEmpty);
+  }
+
+  List<Object?> _encodeContent(List<Map<String, dynamic>> content) {
+    return content
+        .map(
+          (item) => <String, Object?>{
+            "controller": item["controller"].toString(),
+            "checklist": item["checklist"] == true,
+          },
+        )
+        .toList(growable: false);
+  }
+
+  Future<MapDocument> _insert({
+    required String title,
+    required DateTime? date,
+    required List<Map<String, dynamic>> content,
+  }) {
+    final now = DateTime.now().toUtc().toIso8601String();
+    return data.insert(<String, Object?>{
       "title": title,
-      "content": content,
-      "updatedAt": DateTime.now(),
+      "date": date?.toUtc().toIso8601String(),
+      "content": _encodeContent(content),
+      "createdAt": now,
+      "updatedAt": now,
     });
   }
 
-  onDeleted(String id) async {
-    data.removeOne(id);
+  Future<MapDocument> onUpdate(
+    String id, {
+    required String title,
+    required DateTime? date,
+    required List<Map<String, dynamic>> content,
+  }) {
+    return data.patch(id, <String, Object?>{
+      "title": title,
+      "date": date?.toUtc().toIso8601String(),
+      "content": _encodeContent(content),
+      "updatedAt": DateTime.now().toUtc().toIso8601String(),
+    });
   }
 
-  void refresh() {
-    notifyListeners();
+  Future<void> onDeleted(String id) async {
+    await data.delete(id);
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
   }
 }

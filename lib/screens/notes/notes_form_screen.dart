@@ -1,6 +1,5 @@
-import 'package:datalocal/datalocal.dart';
-import 'package:datalocal/datalocal_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/data/map_document.dart';
 import 'package:fluttnotes/providers/app_provider.dart';
 import 'package:fluttnotes/providers/notes_provider.dart';
 import 'package:fluttnotes/utils/date_time_util.dart';
@@ -30,7 +29,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
     if (data != null) {
       titleController.text = data!.get(DataKey("title"));
       contentController.text = data!.get(DataKey("content"));
-      time = data!.createdAt ?? DateTime.now();
+      time = data!.createdAt;
     } else {
       time = DateTime.now();
     }
@@ -75,7 +74,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
               Navigator.pop(context);
             },
             child: Material(
-              color: Colors.black.withOpacity(0.25),
+              color: Colors.black.withValues(alpha: 0.25),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -83,12 +82,8 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                     bottom: 16,
                     child: Container(
                       width: width,
-                      constraints: const BoxConstraints(
-                        maxWidth: 350,
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                      ),
+                      constraints: const BoxConstraints(maxWidth: 350),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
@@ -113,18 +108,12 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                             alignment: Alignment.center,
                             child: const Text(
                               "Delete this note?",
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
+                              style: TextStyle(fontSize: 14),
                             ),
                           ),
-                          const SizedBox(
-                            height: 16,
-                          ),
+                          const SizedBox(height: 16),
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             height: 60,
                             width: width,
                             alignment: Alignment.center,
@@ -148,9 +137,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 16,
-                                ),
+                                const SizedBox(width: 16),
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
@@ -170,9 +157,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                                       alignment: Alignment.center,
                                       child: const Text(
                                         "Delete",
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                        ),
+                                        style: TextStyle(color: Colors.red),
                                       ),
                                     ),
                                   ),
@@ -194,7 +179,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
 
     return PopScope(
       canPop: true,
-      onPopInvoked: (_) async {
+      onPopInvokedWithResult: (didPop, result) async {
         n.onSave(
           title: titleController.text,
           content: contentController.text,
@@ -220,7 +205,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                           Navigator.pop(context);
                         },
                         child: Material(
-                          color: Colors.black.withOpacity(0.25),
+                          color: Colors.black.withValues(alpha: 0.25),
                           child: SafeArea(
                             child: Stack(
                               children: [
@@ -301,10 +286,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
           ],
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             children: [
               TextField(
@@ -336,9 +318,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               SizedBox(
                 width: width,
                 child: TextField(
@@ -351,9 +331,7 @@ class _NotesFormScreenState extends State<NotesFormScreen> {
                     hintText: "Start Typing",
                     border: InputBorder.none,
                   ),
-                  style: TextStyle(
-                    fontSize: fontSize,
-                  ),
+                  style: TextStyle(fontSize: fontSize),
                 ),
               ),
             ],

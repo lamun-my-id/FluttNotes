@@ -1,6 +1,5 @@
-import 'package:datalocal/datalocal.dart';
-import 'package:datalocal/datalocal_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/data/map_document.dart';
 import 'package:fluttnotes/providers/app_provider.dart';
 import 'package:fluttnotes/providers/reminders_provider.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +21,7 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
       "controller": TextEditingController(),
       "checklist": false,
       "focus": FocusNode(),
-    }
+    },
   ];
   DateTime? date;
   DataItem? data;
@@ -35,12 +34,15 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
       titleController.text = data!.get(DataKey("title"));
       controllers =
           List<Map<String, dynamic>>.from(data!.get(DataKey("content")) ?? {})
-              .map((e) => {
-                    "controller":
-                        TextEditingController(text: e['controller'] ?? ""),
-                    "checklist": e['checklist'],
-                    "focus": FocusNode(),
-                  })
+              .map(
+                (e) => {
+                  "controller": TextEditingController(
+                    text: e['controller'] ?? "",
+                  ),
+                  "checklist": e['checklist'],
+                  "focus": FocusNode(),
+                },
+              )
               .toList();
       setState(() {});
     }
@@ -63,10 +65,12 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
           date: date,
           title: titleController.text,
           content: controllers
-              .map((e) => {
-                    "controller": e['controller'].text,
-                    "checklist": e['checklist'],
-                  })
+              .map(
+                (e) => {
+                  "controller": e['controller'].text,
+                  "checklist": e['checklist'],
+                },
+              )
               .toList(),
           id: data?.id,
         );
@@ -82,15 +86,17 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
 
     return PopScope(
       canPop: true,
-      onPopInvoked: (_) async {
+      onPopInvokedWithResult: (didPop, result) async {
         r.onSave(
           date: date,
           title: titleController.text,
           content: controllers
-              .map((e) => {
-                    "controller": e['controller'].text,
-                    "checklist": e['checklist'],
-                  })
+              .map(
+                (e) => {
+                  "controller": e['controller'].text,
+                  "checklist": e['checklist'],
+                },
+              )
               .toList(),
           id: data?.id,
         );
@@ -98,10 +104,7 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          titleSpacing: 0,
-          backgroundColor: Colors.white,
-        ),
+        appBar: AppBar(titleSpacing: 0, backgroundColor: Colors.white),
         body: ListView.builder(
           itemCount: controllers.length,
           itemBuilder: (_, index) {
@@ -111,9 +114,7 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                 children: [
                   if (index == 0)
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       width: width,
                       child: TextField(
                         controller: titleController,
@@ -122,8 +123,9 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                         maxLines: 100,
                         maxLength: 500,
                         onSubmitted: (_) {
-                          FocusScope.of(context)
-                              .requestFocus(controllers.first['focus']);
+                          FocusScope.of(
+                            context,
+                          ).requestFocus(controllers.first['focus']);
                         },
                         onChanged: (_) => save(),
                         decoration: const InputDecoration(
@@ -147,16 +149,14 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                           width: 50,
                           child: Checkbox(
                             value: controllers[index]['checklist'] ?? false,
-                            onChanged: (_) {
-                              controllers[index]['checklist'] = _;
+                            onChanged: (isChecked) {
+                              controllers[index]['checklist'] = isChecked;
                               setState(() {});
                               save();
                             },
                           ),
                         ),
-                        const SizedBox(
-                          width: 4,
-                        ),
+                        const SizedBox(width: 4),
                         Expanded(
                           child: SizedBox(
                             width: width,
@@ -174,15 +174,15 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                                 });
                                 setState(() {});
                                 Future.delayed(
-                                        const Duration(milliseconds: 100))
-                                    .then((value) {
+                                  const Duration(milliseconds: 100),
+                                ).then((value) {
+                                  if (!context.mounted) return;
                                   FocusScope.of(context).requestFocus(
-                                      controllers[index + 1]['focus']);
+                                    controllers[index + 1]['focus'],
+                                  );
                                 });
                               },
-                              style: TextStyle(
-                                fontSize: fontSize,
-                              ),
+                              style: TextStyle(fontSize: fontSize),
                               minLines: 1,
                               maxLines: 10,
                               maxLength: 250,
@@ -204,27 +204,19 @@ class _RemindersFormScreenState extends State<RemindersFormScreen> {
                               alignment: Alignment.center,
                               height: 50,
                               width: 50,
-                              child: const Icon(
-                                Icons.delete,
-                              ),
+                              child: const Icon(Icons.delete),
                             ),
                           ),
-                        const SizedBox(
-                          width: 16,
-                        ),
+                        const SizedBox(width: 16),
                       ],
                     ),
                   ),
                   if (index + 1 == controllers.length)
                     Column(
                       children: [
-                        const SizedBox(
-                          height: 16,
-                        ),
+                        const SizedBox(height: 16),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: InkWell(
                             onTap: () {
                               controllers.add({

@@ -1,6 +1,5 @@
-import 'package:datalocal/datalocal.dart';
-import 'package:datalocal/datalocal_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/data/map_document.dart';
 import 'package:fluttnotes/providers/categories_provider.dart';
 import 'package:fluttnotes/utils/date_time_util.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +27,7 @@ class _CategoriesFormScreenState extends State<CategoriesFormScreen> {
     data = widget.value;
     if (data != null) {
       nameController.text = data!.get(DataKey("name"));
-      time = data!.createdAt ?? DateTime.now();
+      time = data!.createdAt;
     } else {
       time = DateTime.now();
     }
@@ -70,7 +69,7 @@ class _CategoriesFormScreenState extends State<CategoriesFormScreen> {
               Navigator.pop(context);
             },
             child: Material(
-              color: Colors.black.withOpacity(0.25),
+              color: Colors.black.withValues(alpha: 0.25),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -78,12 +77,8 @@ class _CategoriesFormScreenState extends State<CategoriesFormScreen> {
                     bottom: 16,
                     child: Container(
                       width: width,
-                      constraints: const BoxConstraints(
-                        maxWidth: 350,
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                      ),
+                      constraints: const BoxConstraints(maxWidth: 350),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
@@ -108,18 +103,12 @@ class _CategoriesFormScreenState extends State<CategoriesFormScreen> {
                             alignment: Alignment.center,
                             child: const Text(
                               "Delete this note?",
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
+                              style: TextStyle(fontSize: 14),
                             ),
                           ),
-                          const SizedBox(
-                            height: 16,
-                          ),
+                          const SizedBox(height: 16),
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             height: 60,
                             width: width,
                             alignment: Alignment.center,
@@ -143,9 +132,7 @@ class _CategoriesFormScreenState extends State<CategoriesFormScreen> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 16,
-                                ),
+                                const SizedBox(width: 16),
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
@@ -164,9 +151,7 @@ class _CategoriesFormScreenState extends State<CategoriesFormScreen> {
                                       alignment: Alignment.center,
                                       child: const Text(
                                         "Delete",
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                        ),
+                                        style: TextStyle(color: Colors.red),
                                       ),
                                     ),
                                   ),
@@ -188,11 +173,8 @@ class _CategoriesFormScreenState extends State<CategoriesFormScreen> {
 
     return PopScope(
       canPop: true,
-      onPopInvoked: (_) async {
-        c.onSave(
-          name: nameController.text,
-          id: data?.id,
-        );
+      onPopInvokedWithResult: (didPop, result) async {
+        c.onSave(name: nameController.text, id: data?.id);
         // Navigator.pop(context);
       },
       child: Scaffold(
@@ -212,7 +194,7 @@ class _CategoriesFormScreenState extends State<CategoriesFormScreen> {
                           Navigator.pop(context);
                         },
                         child: Material(
-                          color: Colors.black.withOpacity(0.25),
+                          color: Colors.black.withValues(alpha: 0.25),
                           child: SafeArea(
                             child: Stack(
                               children: [
@@ -293,10 +275,7 @@ class _CategoriesFormScreenState extends State<CategoriesFormScreen> {
           ],
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             children: [
               TextField(
@@ -314,24 +293,21 @@ class _CategoriesFormScreenState extends State<CategoriesFormScreen> {
                   border: InputBorder.none,
                   counterText: "",
                 ),
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               SizedBox(
                 width: width,
                 child: Text(
-                  DateTimeUtils.dateFormat(time,
-                          format: "MMMM dd HH:mm", locale: "en") ??
+                  DateTimeUtils.dateFormat(
+                        time,
+                        format: "MMMM dd HH:mm",
+                        locale: "en",
+                      ) ??
                       "",
-                  style: TextStyle(
-                    color: Colors.grey[400]!,
-                  ),
+                  style: TextStyle(color: Colors.grey[400]!),
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
             ],
           ),
         ),

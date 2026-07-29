@@ -1,6 +1,5 @@
-import 'package:datalocal/datalocal.dart';
-import 'package:datalocal/datalocal_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/data/map_document.dart';
 import 'package:fluttnotes/providers/app_provider.dart';
 import 'package:fluttnotes/providers/notes_provider.dart';
 import 'package:fluttnotes/providers/reminders_provider.dart';
@@ -32,10 +31,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         width: width,
         color: Colors.white,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             children: [
               Column(
@@ -46,9 +42,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Cloud Services",
-                      style: TextStyle(
-                        color: Colors.grey[500]!,
-                      ),
+                      style: TextStyle(color: Colors.grey[500]!),
                     ),
                   ),
                   SizedBox(
@@ -61,14 +55,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             "Lamun cloud",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        SizedBox(
-                          width: 4,
-                        ),
+                        SizedBox(width: 4),
                         Text(
                           "Off",
                           style: TextStyle(
@@ -76,12 +66,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Icon(
-                          Icons.chevron_right_outlined,
-                        ),
+                        SizedBox(width: 4),
+                        Icon(Icons.chevron_right_outlined),
                       ],
                     ),
                   ),
@@ -95,14 +81,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             "Delete notes in the cloud",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Icon(
-                          Icons.chevron_right_outlined,
-                        ),
+                        Icon(Icons.chevron_right_outlined),
                       ],
                     ),
                   ),
@@ -117,15 +99,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Style",
-                      style: TextStyle(
-                        color: Colors.grey[500]!,
-                      ),
+                      style: TextStyle(color: Colors.grey[500]!),
                     ),
                   ),
                   InkWell(
                     onTap: () async {
-                      Map<String, dynamic>? result =
-                          await showDialog<Map<String, dynamic>?>(
+                      Map<String, dynamic>?
+                      result = await showDialog<Map<String, dynamic>?>(
                         context: context,
                         builder: (_) {
                           return GestureDetector(
@@ -133,7 +113,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               Navigator.pop(context);
                             },
                             child: Material(
-                              color: Colors.black.withOpacity(0.25),
+                              color: Colors.black.withValues(alpha: 0.25),
                               child: Center(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -186,31 +166,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               "Font size",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          const SizedBox(
-                            width: 4,
-                          ),
+                          const SizedBox(width: 4),
                           Text(
                             ("${a.appSetting.get(DataKey("fontSize.id")) ?? ""}"),
                           ),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          const Icon(
-                            Icons.chevron_right_outlined,
-                          ),
+                          const SizedBox(width: 4),
+                          const Icon(Icons.chevron_right_outlined),
                         ],
                       ),
                     ),
                   ),
                   InkWell(
                     onTap: () async {
-                      Map<String, dynamic>? result =
-                          await showDialog<Map<String, dynamic>?>(
+                      Map<String, dynamic>?
+                      result = await showDialog<Map<String, dynamic>?>(
                         context: context,
                         builder: (_) {
                           return GestureDetector(
@@ -218,7 +190,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               Navigator.pop(context);
                             },
                             child: Material(
-                              color: Colors.black.withOpacity(0.25),
+                              color: Colors.black.withValues(alpha: 0.25),
                               child: Center(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -273,30 +245,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               "Sort",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          Text(
-                            "${a.appSetting.get(DataKey("sort.id")) ?? ""}",
-                          ),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          const Icon(
-                            Icons.chevron_right_outlined,
-                          ),
+                          const SizedBox(width: 4),
+                          Text("${a.appSetting.get(DataKey("sort.id")) ?? ""}"),
+                          const SizedBox(width: 4),
+                          const Icon(Icons.chevron_right_outlined),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
+                  const SizedBox(height: 16),
                   const Divider(),
                 ],
               ),
@@ -308,9 +268,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Data Management",
-                      style: TextStyle(
-                        color: Colors.grey[500]!,
-                      ),
+                      style: TextStyle(color: Colors.grey[500]!),
                     ),
                   ),
                   InkWell(
@@ -332,17 +290,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               "Manage category",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Icon(
-                            Icons.chevron_right_outlined,
-                          ),
+                          SizedBox(width: 4),
+                          Icon(Icons.chevron_right_outlined),
                         ],
                       ),
                     ),
@@ -365,13 +317,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Icon(
-                            Icons.chevron_right_outlined,
-                            color: Colors.red,
-                          ),
+                          SizedBox(width: 4),
+                          Icon(Icons.chevron_right_outlined, color: Colors.red),
                         ],
                       ),
                     ),
@@ -394,13 +341,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Icon(
-                            Icons.chevron_right_outlined,
-                            color: Colors.red,
-                          ),
+                          SizedBox(width: 4),
+                          Icon(Icons.chevron_right_outlined, color: Colors.red),
                         ],
                       ),
                     ),
@@ -423,20 +365,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Icon(
-                            Icons.chevron_right_outlined,
-                            color: Colors.red,
-                          ),
+                          SizedBox(width: 4),
+                          Icon(Icons.chevron_right_outlined, color: Colors.red),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
+                  const SizedBox(height: 16),
                   const Divider(),
                 ],
               ),
@@ -448,9 +383,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Backup & Restore",
-                      style: TextStyle(
-                        color: Colors.grey[500]!,
-                      ),
+                      style: TextStyle(color: Colors.grey[500]!),
                     ),
                   ),
                   InkWell(
@@ -465,17 +398,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               "Backup",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Icon(
-                            Icons.chevron_right_outlined,
-                          ),
+                          SizedBox(width: 4),
+                          Icon(Icons.chevron_right_outlined),
                         ],
                       ),
                     ),
@@ -492,24 +419,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               "Restore",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Icon(
-                            Icons.chevron_right_outlined,
-                          ),
+                          SizedBox(width: 4),
+                          Icon(Icons.chevron_right_outlined),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
+                  const SizedBox(height: 16),
                   const Divider(),
                 ],
               ),
@@ -522,9 +441,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Other",
-                      style: TextStyle(
-                        color: Colors.grey[500]!,
-                      ),
+                      style: TextStyle(color: Colors.grey[500]!),
                     ),
                   ),
                   InkWell(
@@ -539,24 +456,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               "Privacy policy",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Icon(
-                            Icons.chevron_right_outlined,
-                          ),
+                          SizedBox(width: 4),
+                          Icon(Icons.chevron_right_outlined),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
+                  const SizedBox(height: 16),
                 ],
               ),
               // Column(

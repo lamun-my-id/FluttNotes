@@ -17,7 +17,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    Provider.of<AppProvider>(context);
+    final app = Provider.of<AppProvider>(context);
+    if (app.isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       body: SafeArea(
         child: DefaultTabController(
@@ -47,12 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 dividerColor: Colors.transparent,
                                 indicatorColor: Colors.transparent,
                                 tabs: [
-                                  Tab(
-                                    icon: Icon(Icons.edit_note_rounded),
-                                  ),
-                                  Tab(
-                                    icon: Icon(Icons.checklist_outlined),
-                                  ),
+                                  Tab(icon: Icon(Icons.edit_note_rounded)),
+                                  Tab(icon: Icon(Icons.checklist_outlined)),
                                 ],
                               ),
                             ),
@@ -62,10 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const Expanded(
                         child: TabBarView(
-                          children: [
-                            NotesScreen(),
-                            RemindersScreen(),
-                          ],
+                          children: [NotesScreen(), RemindersScreen()],
                         ),
                       ),
                     ],
@@ -79,16 +75,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => const SettingsScreen()),
+                          builder: (_) => const SettingsScreen(),
+                        ),
                       );
                     },
                     child: Container(
                       height: 50,
                       width: 50,
                       alignment: Alignment.center,
-                      child: const Icon(
-                        Icons.settings_outlined,
-                      ),
+                      child: const Icon(Icons.settings_outlined),
                     ),
                   ),
                 ),

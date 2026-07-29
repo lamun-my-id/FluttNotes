@@ -10,10 +10,12 @@ class DateTimeUtils {
   /// mengembalikan dateformat berdasarkan local date format
   /// isi [tanggal] dengan DateTime atau TimeStamp
   /// [format] default =  dd MMMM yyyy , hasil : 12 Juni 2002
-  static String? dateFormat(dynamic tanggal,
-      {String format = 'dd MMMM yyyy',
-      String locale = 'id',
-      Duration? addDuration}) {
+  static String? dateFormat(
+    dynamic tanggal, {
+    String format = 'dd MMMM yyyy',
+    String locale = 'id',
+    Duration? addDuration,
+  }) {
     String? hasil;
 
     DateTime? date = toDateTime(tanggal);
@@ -26,10 +28,12 @@ class DateTimeUtils {
     return hasil;
   }
 
-  static String? dateLogFormat(dynamic tanggal,
-      {String format = 'dd/MM/yyyy',
-      String locale = 'id',
-      Duration? addDuration}) {
+  static String? dateLogFormat(
+    dynamic tanggal, {
+    String format = 'dd/MM/yyyy',
+    String locale = 'id',
+    Duration? addDuration,
+  }) {
     String? hasil;
     DateTime now = DateTime.now();
     DateTime? dtanggal = tanggal;
@@ -49,8 +53,11 @@ class DateTimeUtils {
     return hasil;
   }
 
-  static String? mailFormat(dynamic tanggal,
-      {String locale = 'id', Duration? addDuration}) {
+  static String? mailFormat(
+    dynamic tanggal, {
+    String locale = 'id',
+    Duration? addDuration,
+  }) {
     String? hasil;
     DateTime now = DateTime.now();
     DateTime? dtanggal = toDateTime(tanggal);
@@ -74,8 +81,11 @@ class DateTimeUtils {
     return hasil;
   }
 
-  static String? dateChatFormat(dynamic tanggal,
-      {String format = 'dd/MM/yyyy', String locale = 'id'}) {
+  static String? dateChatFormat(
+    dynamic tanggal, {
+    String format = 'dd/MM/yyyy',
+    String locale = 'id',
+  }) {
     String? hasil;
     DateTime now = DateTime.now();
     if (tanggal != null) {

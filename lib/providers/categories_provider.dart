@@ -1,92 +1,63 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+
 import 'package:datalocal/datalocal.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttnotes/data/map_document.dart';
 
 class CategoriesProvider with ChangeNotifier {
-  late DataLocal data;
+  CategoriesProvider(this.data) {
+    _subscription = data.query().watch().listen((_) => notifyListeners());
+  }
+
+  final DataLocalCollection<Map<String, Object?>> data;
+  StreamSubscription<DataLocalQuerySnapshot<Map<String, Object?>>>?
+  _subscription;
   bool isLoading = false;
-  Map<String, dynamic> sort = {"value": "updatedAt"};
-
-  CategoriesProvider() {
-    isLoading = true;
-    refresh();
-    initialize();
-  }
-
-  initialize() async {
-    // print("object");
-    data = await DataLocal.create(
-      "categories",
-      onRefresh: () => refresh(),
-      // debugMode: true,
-    );
-    data.onRefresh = () async {
-      // categories = (await data.find(
-      //   sorts: [
-      //     DataSort(
-      //       key: DataKey(sort['value'], onKeyCatch: "createdAt"),
-      //       desc: sort['desc'] ?? true,
-      //     ),
-      //   ],
-      // ))
-      //     .data;
-      refresh();
-    };
-    data.refresh();
-    isLoading = false;
-    refresh();
-  }
-
-  void refresh() {
-    notifyListeners();
-  }
+  Map<String, dynamic> sort = {"value": "updatedAt", "desc": true};
 
   void changeSort(Map<String, dynamic> value) {
     sort = value;
-    refresh();
-    data.refresh();
+    notifyListeners();
   }
 
-  Future<DataItem?> save({String? id, required String name}) async {
-    if (id != null) {
-      if (name.isNotEmpty) {
-        return await onUpdate(id, name: name);
-      }
-    } else {
-      if (name.isNotEmpty) {
-        return await data.insertOne({
-          "name": name,
-          "updatedAt": DateTime.now(),
-        });
-      }
-    }
-    return null;
+  Future<MapDocument?> save({String? id, required String name}) async {
+    if (name.isEmpty) return null;
+    return id == null ? _insert(name) : onUpdate(id, name: name);
   }
 
-  onSave({String? id, required String name}) async {
-    if (id != null) {
-      if (name.isNotEmpty) {
-        onUpdate(id, name: name);
-      } else {
-        onDeleted(id);
-      }
+  Future<void> onSave({String? id, required String name}) async {
+    if (id == null) {
+      if (name.isNotEmpty) await _insert(name);
+    } else if (name.isEmpty) {
+      await onDeleted(id);
     } else {
-      if (name.isNotEmpty) {
-        data.insertOne({
-          "name": name,
-          "updatedAt": DateTime.now(),
-        });
-      }
+      await onUpdate(id, name: name);
     }
   }
 
-  onUpdate(String id, {required String name}) async {
-    data.updateOne(id, value: {
+  Future<MapDocument> _insert(String name) {
+    final now = DateTime.now().toUtc().toIso8601String();
+    return data.insert(<String, Object?>{
       "name": name,
-      "updatedAt": DateTime.now(),
+      "createdAt": now,
+      "updatedAt": now,
     });
   }
 
-  onDeleted(String id) async {
-    data.removeOne(id);
+  Future<MapDocument> onUpdate(String id, {required String name}) {
+    return data.patch(id, <String, Object?>{
+      "name": name,
+      "updatedAt": DateTime.now().toUtc().toIso8601String(),
+    });
+  }
+
+  Future<void> onDeleted(String id) async {
+    await data.delete(id);
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
   }
 }

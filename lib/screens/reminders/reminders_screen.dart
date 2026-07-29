@@ -1,6 +1,5 @@
-import 'package:datalocal/datalocal.dart';
-import 'package:datalocal/datalocal_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttnotes/data/map_document.dart';
 import 'package:fluttnotes/providers/reminders_provider.dart';
 import 'package:fluttnotes/screens/reminders/reminders_form_screen.dart';
 import 'package:fluttnotes/utils/date_time_util.dart';
@@ -32,27 +31,21 @@ class _RemindersScreenState extends State<RemindersScreen> {
                 child: Builder(
                   builder: (_) {
                     if (r.isLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const Center(child: CircularProgressIndicator());
                     }
                     return FutureBuilder<DataQuery>(
-                      future: r.data.find(
-                        sorts: [
-                          DataSort(
-                            key: DataKey(r.sort['value'],
-                                onKeyCatch: "createdAt"),
-                            desc: r.sort['desc'] ?? true,
-                          ),
-                        ],
-                      ),
+                      future: r.data
+                          .query()
+                          .orderBy(
+                            r.sort['value'] ?? 'createdAt',
+                            descending: r.sort['desc'] ?? true,
+                          )
+                          .get(),
                       builder: (_, snapshot) {
                         if (!snapshot.hasData) {
-                          if (r.isLoading) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
                         }
                         DataQuery query = snapshot.data!;
                         List<DataItem> datas = query.data;
@@ -66,9 +59,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
                                 size: 32,
                                 color: Color(0xFF1F325D),
                               ),
-                              const SizedBox(
-                                height: 8,
-                              ),
+                              const SizedBox(height: 8),
                               Text(
                                 "No task here yet",
                                 style: TextStyle(
@@ -91,17 +82,14 @@ class _RemindersScreenState extends State<RemindersScreen> {
                           itemBuilder: (_, index) {
                             DataItem d = datas[index];
                             return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 4,
-                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 4),
                               child: InkWell(
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => RemindersFormScreen(
-                                        value: d,
-                                      ),
+                                      builder: (_) =>
+                                          RemindersFormScreen(value: d),
                                     ),
                                   );
                                 },
@@ -116,7 +104,8 @@ class _RemindersScreenState extends State<RemindersScreen> {
                                     color: const Color(0xFFFCFCFD),
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
-                                        color: const Color(0xFFE4E7EC)),
+                                      color: const Color(0xFFE4E7EC),
+                                    ),
                                   ),
                                   child: Column(
                                     children: [
@@ -134,88 +123,91 @@ class _RemindersScreenState extends State<RemindersScreen> {
                                       ),
                                       Column(
                                         children: List.generate(
-                                            (d.get(DataKey("content")) ?? [])
-                                                .length, (index2) {
-                                          Map<String, dynamic> task =
-                                              (d.get(DataKey("content")) ??
-                                                  [])[index2];
-                                          return SizedBox(
-                                            width: width,
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                SizedBox(
-                                                  height: 50,
-                                                  width: 50,
-                                                  child: Checkbox(
-                                                    value: task['checklist'] ??
-                                                        false,
-                                                    onChanged: (_) {
-                                                      task['checklist'] = _;
-                                                      setState(() {});
-                                                      r.onSave(
-                                                        id: d.id,
-                                                        title: d.get(
-                                                            DataKey('title')),
-                                                        date: d.get(
-                                                            DataKey("date")),
-                                                        content: List<
-                                                                Map<String,
-                                                                    dynamic>>.from(
-                                                            (d.get(DataKey(
-                                                                    "content")) ??
-                                                                [])),
-                                                      );
-                                                      // print("saved");
-                                                    },
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 4,
-                                                ),
-                                                Expanded(
-                                                  child: Container(
-                                                    width: width,
-                                                    constraints:
-                                                        const BoxConstraints(
-                                                      minHeight: 50,
-                                                    ),
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      task['controller'],
+                                          (d.get(DataKey("content")) ?? [])
+                                              .length,
+                                          (index2) {
+                                            Map<String, dynamic> task =
+                                                (d.get(DataKey("content")) ??
+                                                [])[index2];
+                                            return SizedBox(
+                                              width: width,
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    height: 50,
+                                                    width: 50,
+                                                    child: Checkbox(
+                                                      value:
+                                                          task['checklist'] ??
+                                                          false,
+                                                      onChanged: (isChecked) {
+                                                        task['checklist'] =
+                                                            isChecked;
+                                                        setState(() {});
+                                                        r.onSave(
+                                                          id: d.id,
+                                                          title: d.get(
+                                                            DataKey('title'),
+                                                          ),
+                                                          date: d.get(
+                                                            DataKey("date"),
+                                                          ),
+                                                          content:
+                                                              List<
+                                                                Map<
+                                                                  String,
+                                                                  dynamic
+                                                                >
+                                                              >.from(
+                                                                (d.get(
+                                                                      DataKey(
+                                                                        "content",
+                                                                      ),
+                                                                    ) ??
+                                                                    []),
+                                                              ),
+                                                        );
+                                                        // print("saved");
+                                                      },
                                                     ),
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 16,
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        }),
+                                                  const SizedBox(width: 4),
+                                                  Expanded(
+                                                    child: Container(
+                                                      width: width,
+                                                      constraints:
+                                                          const BoxConstraints(
+                                                            minHeight: 50,
+                                                          ),
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Text(
+                                                        task['controller'],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 16),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
                                       ),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
+                                      const SizedBox(height: 4),
                                       SizedBox(
                                         width: width,
                                         child: Text(
                                           DateTimeUtils.dateFormat(
-                                                d.createdAt ??
-                                                    d.get(
-                                                        DataKey("createdAt")) ??
-                                                    "",
+                                                d.createdAt,
                                                 format: "MMMM dd",
                                                 locale: "en",
                                               ) ??
                                               "",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontSize: 10,
-                                          ),
+                                          style: const TextStyle(fontSize: 10),
                                         ),
                                       ),
                                     ],
@@ -238,21 +230,14 @@ class _RemindersScreenState extends State<RemindersScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => const RemindersFormScreen(),
-            ),
+            MaterialPageRoute(builder: (_) => const RemindersFormScreen()),
           );
         },
         backgroundColor: const Color(0xFF1F325D),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(100),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(100)),
         ),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
