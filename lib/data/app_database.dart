@@ -1,4 +1,24 @@
 import 'package:datalocal/datalocal.dart';
+import 'package:datalocal_sqlite/datalocal_sqlite.dart';
+import 'package:flutter/foundation.dart';
+
+DataLocalStorage createDefaultAppStorage({
+  bool isWeb = kIsWeb,
+  TargetPlatform? targetPlatform,
+  DataLocalStorage Function()? sqliteFactory,
+  DataLocalStorage Function()? sharedPreferencesFactory,
+}) {
+  final platform = targetPlatform ?? defaultTargetPlatform;
+  final supportsSqlite =
+      !isWeb &&
+      (platform == TargetPlatform.android ||
+          platform == TargetPlatform.iOS ||
+          platform == TargetPlatform.macOS);
+  return supportsSqlite
+      ? (sqliteFactory ?? DataLocalSqliteStorage.new)()
+      : (sharedPreferencesFactory ??
+            DataLocalSharedPreferencesAsyncStorage.new)();
+}
 
 final class AppDatabase {
   AppDatabase._(this.database)
@@ -27,7 +47,7 @@ final class AppDatabase {
         );
     final database = await DataLocalDatabase.open(
       name: databaseName,
-      storage: storage ?? DataLocalSharedPreferencesAsyncStorage(),
+      storage: storage ?? createDefaultAppStorage(),
       encryption: resolvedEncryption,
     );
     return AppDatabase._(database);
